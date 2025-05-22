@@ -25,6 +25,6 @@ Route::prefix('auth')->group(function () {
 
 
 
-Route::apiResource('categories', CategoryController::class);
+Route::apiResource('categories', CategoryController::class)->middleware('auth:sanctum');
 
 
