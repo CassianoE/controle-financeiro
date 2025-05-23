@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Auth\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,5 +27,9 @@ Route::prefix('auth')->group(function () {
 
 
 Route::apiResource('categories', CategoryController::class)->middleware('auth:sanctum');
+Route::apiResource('transactions', TransactionController::class)->middleware('auth:sanctum');
+Route::get('balance', [TransactionController::class, 'getBalance'])->middleware('auth:sanctum');
+
+
 
 
