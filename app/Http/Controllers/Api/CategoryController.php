@@ -17,51 +17,11 @@ class CategoryController extends Controller
         protected CategoryService $categoryService
     ){}
     
-/**
- *   @OA\Get(
- *       path="/api/categories",
- *       tags={"Categorias"},
- *       summary="Listar categorias do usuario",
- *       security={
- *           {
- *               "sanctum": {}
- *           }
- *       },
- *       @OA\Response(
- *          response=200,
- *         description="Lista de categorias"
- *       )
- *   )
- */
+
     public function index(){
         return response()->json($this->categoryService->list(Auth::id()));
     }
 
-    /**
- *   @OA\Post(
- *       path="/api/categories",
- *       tags={"Categorias"},
- *       summary="Criar categoria",
- *       security={
- *           {
- *               "sanctum": {}
- *           }
- *       },
- *       @OA\RequestBody(
- *           @OA\MediaType(
- *               mediaType="application/json",
- *               @OA\Schema(
- *                   @OA\Property(property="name", type="string", example="Categoria de teste"),
- *                   @OA\Property(property="type", type="string", example="expense"),
- *               )
- *           )
- *       ),
- *       @OA\Response(
- *           response=201,
- *           description="Categoria criada com sucesso"
- *       )
- *   )
- */
     public function store(CategoryRequest $request){
 
         $data = $request->validated();
