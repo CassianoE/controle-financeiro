@@ -24,6 +24,16 @@ class CategoryService
         return $this->categoryRepository->create($data);
     }
 
+    public function findById(int $id): Category
+    {
+        return $this->categoryRepository->find($id);
+    }
+
+    public function show(int $id): Category
+    {
+        return $this->categoryRepository->show($id);
+    }
+
     public function update(Category $category, array $data): Category
     {
         return $this->categoryRepository->update($category, $data);

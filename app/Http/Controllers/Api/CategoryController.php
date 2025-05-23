@@ -31,26 +31,59 @@ class CategoryController extends Controller
         return response()->json($category, 201);
     }
 
-    public function update(CategoryRequest $request, Category $category){
+    public function show(int $id){
 
+        try {
+            $category = $this->categoryService->findById($id);
+    
+            return response()->json([
+                'message' => 'Categoria encontrada',
+                'data' => $category
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'message' => 'Categoria não encontrada',
+            ], 404);
+        }
+    }
 
-        $data = $request->validated();
+    public function update(CategoryRequest $request, int $id){
 
-        $category = $this->categoryService->update($category, $data);
+        try {
+            $category = $this->categoryService->findById($id);
+            $updatedCategory = $this->categoryService->update($category, $request->validated());
+    
+            return response()->json([
+                'message' => 'Categoria atualizada com sucesso',
+                'data' => $updatedCategory
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'message' => 'Categoria não encontrada',
+            ], 404);
+        }
+    }
 
-        return response()->json($category);
+    public function destroy(int $id){
 
-}
-
-
-    public function destroy(Category $category){
-
-        $this->authorize('delete', $category);
-
-        $this->categoryService->delete($category);
-
-        return response()->json([], 204);
-
+        try {
+            $category = $this->categoryService->findById($id);
+            $this->authorize('delete', $category);
+            $this->categoryService->delete($category);
+    
+            return response()->json([
+                'message' => 'Categoria excluída com sucesso',
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'message' => 'Categoria não encontrada',
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Ocorreu um erro ao excluir a categoria',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
 }
