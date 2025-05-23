@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTOs\CreateCategoryDTO;
 use App\Models\Category;
 use App\Repositories\CategoryRepository;
 use Illuminate\Support\Collection;
@@ -18,10 +19,10 @@ class CategoryService
         return $this->categoryRepository->getAllByUserId($userId);
     }
 
-    public function store (array $data, int $userId): Category
+    public function store (array $data): Category
     {
-        $data['user_id'] = $userId;
-        return $this->categoryRepository->create($data);
+       $categoryDTO = CreateCategoryDTO::fromArray($data);
+       return $this->categoryRepository->create($categoryDTO->toArray());
     }
 
     public function findById(int $id): Category
