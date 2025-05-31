@@ -3,8 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\Transaction;
+use Illuminate\Database\Eloquent\Collection;
 use App\Repositories\Contracts\TransactionRepositoryInterface;
-use Illuminate\Support\Collection;
 
 class TransactionRepository implements TransactionRepositoryInterface
 {
@@ -36,16 +36,42 @@ class TransactionRepository implements TransactionRepositoryInterface
         $transaction->delete();
     }
 
-    public function getBalance(int $userId): float
+
+    public function queryByPeriod(int $userId, ?String $startDate, ?String $endDate): Collection
     {
-        $income = Transaction::where('user_id', $userId)
-            ->where('type', 'income')
-            ->sum('amount');
 
-        $expense = Transaction::where('user_id', $userId)
-            ->where('type', 'expense')
-            ->sum('amount');
+        $query = Transaction::where('user_id', $userId);
 
-        return $income - $expense;
+        if($startDate){ 
+            $query->where('date', '>=', $startDate);
+        }
+
+        if($endDate){
+            $query->where('date', '<=', $endDate);
+        }
+
+        return $query->get();
     }
+
+    public function getbyPeriod(int $userId, ?String $startDate, ?String $endDate): Collection
+    {
+        return $this->queryByPeriod($userId, $startDate, $endDate);
+    }
+
+    public function getSummaryByPeriod(int $userId, ?String $startDate, ?String $endDate):array
+    {
+        $query = $this->queryByPeriod($userId, $startDate, $endDate);
+
+        $income = (clone $query)->where('type', 'income')->sum('amount');
+        $expense = (clone $query)->where('type', 'expense')->sum('amount');
+
+        return [
+            'income' => $income,
+            'expense' => $expense,
+            'balance' => $income - $expense
+        ];
+    }
+
+    
+    
 }

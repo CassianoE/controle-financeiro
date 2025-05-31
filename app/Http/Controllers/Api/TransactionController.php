@@ -76,15 +76,24 @@ class TransactionController extends Controller
         }
     }
 
-    public function getBalance()
+    public function getByPeriod(Request $request)
     {
-        $balance = $this->transactionService->getBalance(Auth::id());
+        $transactions = $this->transactionService->getbyPeriod(Auth::id(), $request->startDate, $request->endDate);
 
         return response()->json([
-            'message' => 'Saldo calculado com sucesso',
-            'Saldo' => $balance
+            'message' => 'Transações encontradas',
+            'data' => $transactions
+        ], 200);
+    }
+
+    public function getSummaryByPeriod(Request $request)
+    {
+        $summary = $this->transactionService->getSummaryByPeriod(Auth::id(), $request->startDate, $request->endDate);
+
+        return response()->json([
+            'message' => 'Resumo calculado com sucesso',
+            'data' => $summary
         ], 200);
     }
     
-
 }

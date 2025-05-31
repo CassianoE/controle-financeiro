@@ -24,12 +24,13 @@ Route::prefix('auth')->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:sanctum');
 });
 
+// Rotas personalizadas de transactions antes do resource
+Route::prefix('transactions')->middleware('auth:sanctum')->group(function () {
+    Route::get('balance', [TransactionController::class, 'getBalance']);
+    Route::get('period', [TransactionController::class, 'getByPeriod']);
+    Route::get('summary', [TransactionController::class, 'getSummaryByPeriod']);
+});
 
-
+// Rotas de recurso
 Route::apiResource('categories', CategoryController::class)->middleware('auth:sanctum');
-Route::apiResource('transactions', TransactionController::class)->middleware('auth:sanctum');
-Route::get('balance', [TransactionController::class, 'getBalance'])->middleware('auth:sanctum');
-
-
-
-
+Route::apiResource('transactions', TransactionController::class)->middleware('auth:sanctum')->except(['show']);

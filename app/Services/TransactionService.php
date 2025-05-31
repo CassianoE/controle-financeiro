@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTOs\CreateTransactionDTO;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Contracts\TransactionRepositoryInterface;
 
@@ -40,8 +41,13 @@ class TransactionService
         return $this->transactionRepository->delete($id);
     }
 
-    public function getBalance(int $userId): float
+    public function getbyPeriod(int $userId, ?String $startDate, ?String $endDate): Collection
     {
-        return $this->transactionRepository->getBalance($userId);
+        return $this->transactionRepository->getbyPeriod($userId, $startDate, $endDate);
+    }
+
+    public function getSummaryByPeriod(int $userId, ?String $startDate, ?String $endDate):array
+    {
+        return $this->transactionRepository->getSummaryByPeriod($userId, $startDate, $endDate);
     }
 }
