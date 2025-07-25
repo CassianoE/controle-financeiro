@@ -11,7 +11,12 @@ class TransactionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $accountId = $this->input('account_id');
+        $account = Account::find($accountId);
+        if (!$account) {
+            return false;
+        }
+        return $account->user_id === $this->user()->id;
     }
 
     /**
@@ -28,6 +33,7 @@ class TransactionRequest extends FormRequest
             'type' => 'required|in:income,expense',
             'category_id' => 'required|exists:categories,id',
             'description' => 'nullable|string',
+            'account_id' => 'required|exists:accounts,id',
         ];
     }
 }

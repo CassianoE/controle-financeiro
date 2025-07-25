@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Category;
 
 class CategoryRequest extends FormRequest
 {
@@ -11,7 +12,16 @@ class CategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
+
+    $category_id_from_url = $this->route('category'); 
+
+    if (empty($category_id_from_url)) {
         return true;
+    }
+
+    $category = Category::find($category_id_from_url);
+
+    return $category && $category->user_id === $this->user()->id;
     }
 
     /**
