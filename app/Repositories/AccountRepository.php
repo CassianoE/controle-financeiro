@@ -19,7 +19,7 @@ class AccountRepository {
         return Account::findOrFail($id);
     }
 
-    public function create(array $data): Account
+    public function create(array $data,int $userId): Account
     {
         return Account::create($data);
     }

@@ -7,6 +7,8 @@ use App\Repositories\TransactionRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Contracts\TransactionRepositoryInterface;
+use App\Repositories\Contracts\AccountRepositoryInterface;
+use App\Repositories\AccountRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             TransactionRepositoryInterface::class,
             TransactionRepository::class
+        );
+        $this->app->bind(
+            AccountRepositoryInterface::class,
+             AccountRepository::class
         );
     }
 
