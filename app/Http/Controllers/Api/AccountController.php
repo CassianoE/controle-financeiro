@@ -53,10 +53,10 @@ class AccountController extends Controller
         return response()->json($accountUpdated, 200);
     }
 
-    public function destroy(Account $account)
+    public function destroy(AccountRequest $accountRequest ,Account $account)
     {
         $this->accountService->destroy($account);
 
-        return response()->json(204);
+        return response()->noContent(204);
     }
 }
