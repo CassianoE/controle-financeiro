@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller; 
+use App\Http\Requests\AccountRequest;
 use App\Services\AccountService;      
 use Illuminate\Http\JsonResponse;              
 
@@ -25,35 +26,37 @@ class AccountController extends Controller
         return response()->json($accounts, 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(AccountRequest $accountRequest): JsonResponse
     {
-        
+        $userId = $accountRequest->user()->id;
+
+        $data = $accountRequest->validated();
+
+        $account = $this->accountService->store($data,$userId);
+
+        return response()->json($account, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(string $accountId ,AccountRequest $accountRequest): JsonResponse
     {
-        //
+        $account = $this->accountService->findById($accountId);
+
+        return response()->json($account, 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(AccountRequest $accountRequest ,Account $account): JsonResponse
     {
-        //
+        $data = $accountRequest->validated();
+
+        $accountUpdated = $this->accountService->update($account ,$data);
+
+        return response()->json($accountUpdated, 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Account $account)
     {
-        //
+        $this->accountService->destroy($account);
+
+        return response()->json(204);
     }
 }
