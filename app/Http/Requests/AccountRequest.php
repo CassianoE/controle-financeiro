@@ -25,7 +25,7 @@ class AccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'exists:users,id',
             'name' => 'required|string|max:255',
             'type' => 'required|in:savings,checking,credit,cas,investment,other',
             'balance' => 'required|numeric|min:0',

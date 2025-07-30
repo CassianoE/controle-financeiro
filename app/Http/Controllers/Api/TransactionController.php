@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Services\TransactionService;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\TransactionRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 
 class TransactionController extends Controller
 {
@@ -17,43 +19,19 @@ class TransactionController extends Controller
 
     public function index()
     {
-        return response()->json($this->transactionService->getAll());
+        $transactions = $this->transactionService->getAll();
+        return response()->json(['data' => $transactions]);
     }
 
-    public function store(TransactionRequest $request)
+    public function store(TransactionRequest $request): JsonResponse
     {
         $transaction = $this->transactionService->create($request->validated());
-        
-        return response()->json([
-            'message' => 'Transação criada com sucesso',
-            'data' => $transaction
-            ], 201);
+
+        return response()->json(['data' => $transaction], 201);
     }
 
-    public function show(int $id)
+    public function show(TransactionRequest $request, Transaction $transaction): JsonResponse
     {
-        try {
-            $transaction = $this->transactionService->findById($id);
-    
-            return response()->json([
-                'message' => 'Transação encontrada',
-                'data' => $transaction
-            ], 200);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'message' => 'Transação não encontrada',
-            ], 404);
-        }
-    }
-
-    public function update(TransactionRequest $request, int $id)
-    {
-        $transaction = $this->transactionService->update($id, $request->validated());
-        
-        return response()->json([
-            'message' => 'Transação atualizada com sucesso',
-            'data' => $transaction
-            ], 200);
     }
 
     public function destroy(int $id)

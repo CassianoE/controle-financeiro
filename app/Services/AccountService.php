@@ -8,33 +8,33 @@ use Illuminate\Support\Collection;
 
 class AccountService {
 
-    public function __construct(AccountRepositoryInterface $AccountRepository){
-        $this->AccountRepository = $AccountRepository;
-    }
+    public function __construct(
+        protected AccountRepositoryInterface $accountRepository
+    ) {}
 
     public function list(int $id): Collection
     {
-        return $this->AccountRepository->getAllByUserId($id);
+        return $this->accountRepository->getAllByUserId($id);
     }
 
     public function findById (int $id): Account
     {
-        return $this->AccountRepository->findById($id);
+        return $this->accountRepository->findById($id);
     }
 
     public function store(array $data,int $userId): Account
     {
         $data['user_id'] = $userId;
-        return $this->AccountRepository->create($data);
+        return $this->accountRepository->create($data);
     }
 
     public function update(Account $account,array $data): Account
     {
-        return $this->AccountRepository->update($account,$data);
+        return $this->accountRepository->update($account,$data);
     }
 
-    public function delete(Account $account): bool
+    public function destroy(Account $account): bool
     {
-        return $this->AccountRepository->delete($account);
+        return $this->accountRepository->delete($account);
     }
 }

@@ -12,8 +12,9 @@ class CreateTransactionDTO
         public string $date,
         public string $type,
         public int $category_id,
+         public int $account_id,
         public ?string $description = null,
-        public ?int $user_id = null
+        public ?int $user_id = null,
     ) {}
 
     public static function fromArray(array $data): self
@@ -24,6 +25,7 @@ class CreateTransactionDTO
             date: $data['date'],
             type: $data['type'],
             category_id: (int) $data['category_id'],
+            account_id: (int) $data['account_id'],
             description: $data['description'] ?? null,
             user_id: Auth::id()
         );
@@ -38,7 +40,8 @@ class CreateTransactionDTO
             'type' => $this->type,
             'category_id' => $this->category_id,
             'description' => $this->description,
-            'user_id' => $this->user_id
+            'user_id' => $this->user_id,
+            'account_id' => $this->account_id
         ];
     }
 

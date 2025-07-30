@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Api\AccountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,3 +35,4 @@ Route::prefix('transactions')->middleware('auth:sanctum')->group(function () {
 // Rotas de recurso
 Route::apiResource('categories', CategoryController::class)->middleware('auth:sanctum');
 Route::apiResource('transactions', TransactionController::class)->middleware('auth:sanctum')->except(['show']);
+Route::apiResource('account', AccountController::class)->middleware('auth:sanctum');

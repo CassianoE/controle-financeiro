@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Category; 
+use App\Models\Account;  
 
 class TransactionRequest extends FormRequest
 {
@@ -11,12 +13,29 @@ class TransactionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $accountId = $this->input('account_id');
-        $account = Account::find($accountId);
-        if (!$account) {
-            return false;
+        $transactionId = $this->route('transaction');
+
+        if (empty($transactionId)){
+           $accountId = $this->input('account_id');
+
+           if (empty($accountId)) {
+                return false; 
+            }
+
+            $account = Account::find($accountId);
+
+            return $account && $account->user_id === $this->user()->id;
+        } else {
+
+            $transaction = Transaction::with('account')->find($transactionId);
+
+            if(!$transaction || !$transaction->account){
+                return false;
+            }
+
+            return $transaction->account->user_id === $this->user()->id;
         }
-        return $account->user_id === $this->user()->id;
+
     }
 
     /**

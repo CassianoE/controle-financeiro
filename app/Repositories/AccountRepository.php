@@ -3,10 +3,11 @@
 namespace App\Repositories;
 
 use App\Models\Account;
+use App\Repositories\Contracts\AccountRepositoryInterface;
 use Illuminate\Support\Collection;
 
 
-class AccountRepository {
+class AccountRepository implements AccountRepositoryInterface {
 
 
     public function getAllByUserId(int $userId): Collection
@@ -19,7 +20,7 @@ class AccountRepository {
         return Account::findOrFail($id);
     }
 
-    public function create(array $data,int $userId): Account
+    public function create(array $data): Account
     {
         return Account::create($data);
     }
@@ -32,6 +33,6 @@ class AccountRepository {
 
     public function delete(Account $account): bool
     {
-        $account->delete();
+        return $account->delete();
     }
 }
