@@ -6,11 +6,13 @@ use App\DTOs\CreateTransactionDTO;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Contracts\TransactionRepositoryInterface;
+use App\Repositories\Contracts\AccountRepositoryInterface;
 
 class TransactionService
 {
     public function __construct(
-        private TransactionRepositoryInterface $transactionRepository
+        private TransactionRepositoryInterface $transactionRepository,
+        private AccountRepositoryInterface $accountRepository
     ) {}
 
     public function getAll()
@@ -28,7 +30,19 @@ class TransactionService
         
         $transactionDTO = CreateTransactionDTO::fromArray($data);
 
-        return $this->transactionRepository->create($transactionDTO->toArray());
+        $newTransaction = $this->transactionRepository->create($transactionDTO->toArray());
+
+        $account = $this->accountRepository->findById($newTransaction->account_id);
+
+        if ($newTransaction->type === 'income') {
+            $account->balance = $account->balance + $newTransaction->amount;
+        } else {
+            $account->balance = $account->balance - $newTransaction->amount;
+        }
+
+        $this->accountRepository->update($account,['balance' => $account->balance]);
+
+        return $newTransaction;       
     }
 
     public function update(int $id, array $data)
