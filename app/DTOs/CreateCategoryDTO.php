@@ -9,13 +9,15 @@ class CreateCategoryDTO
 {
     public function __construct(
         public string $name,
-        public int $user_id
+        public string $type,
+        public int $user_id,
     ) {}
 
     public static function fromArray(array $data): self
     {
         return new self(
             name: $data['name'],
+            type: $data['type'],
             user_id: Auth::id()
         );
     }
@@ -24,6 +26,7 @@ class CreateCategoryDTO
     {
         return [
             'name' => $this->name,
+            'type' => $this->type,
             'user_id' => $this->user_id
         ];
     }
