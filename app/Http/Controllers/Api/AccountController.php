@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller; 
+use app\Models\Account;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountRequest;
-use App\Services\AccountService;      
-use Illuminate\Http\JsonResponse;              
+use App\Services\AccountService;
+use Illuminate\Http\JsonResponse;
 
 
 class AccountController extends Controller
 {
-    
     public function __construct(AccountService $accountService){
         $this->accountService = $accountService;
     }
@@ -39,7 +39,8 @@ class AccountController extends Controller
 
     public function show(string $accountId ,AccountRequest $accountRequest): JsonResponse
     {
-        $account = $this->accountService->findById($accountId);
+        $userId = $accountRequest->user()->id;
+        $account = $this->accountService->findById($accountId, $userId);
 
         return response()->json($account, 200);
     }

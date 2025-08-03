@@ -17,9 +17,9 @@ class AccountService {
         return $this->accountRepository->getAllByUserId($id);
     }
 
-    public function findById (int $id): Account
+    public function findById (int $id,int $userId): Account
     {
-        return $this->accountRepository->findById($id);
+        return $this->accountRepository->findById($id, $userId);
     }
 
     public function store(array $data,int $userId): Account

@@ -9,7 +9,7 @@ interface AccountRepositoryInterface {
 
     public function getAllByUserId(int $userId): Collection;
 
-    public function findById(int $id): Account;
+    public function findById(int $id,int $userId): Account;
 
     public function create(array $data): Account;
 

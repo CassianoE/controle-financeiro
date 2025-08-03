@@ -18,10 +18,6 @@ class CategoryRepository
         return Category::findOrFail($id);
     }
 
-    public function findById(int $id): Category
-    {
-        return Category::findOrFail($id);
-    }
 
     public function create(array $data): Category
     {
