@@ -29,7 +29,6 @@ class AccountController extends Controller
     public function store(AccountRequest $accountRequest): JsonResponse
     {
         $userId = $accountRequest->user()->id;
-
         $data = $accountRequest->validated();
 
         $account = $this->accountService->store($data,$userId);
