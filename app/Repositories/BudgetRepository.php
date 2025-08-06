@@ -32,9 +32,9 @@ class BudgetRepository implements BudgetRepositoryInterface
         return $budget;
     }
 
-    public function delete(Budget $budget): void
+    public function delete(Budget $budget): bool
     {
-        $budget->delete();
+        return $budget->delete();
     }
 
 
