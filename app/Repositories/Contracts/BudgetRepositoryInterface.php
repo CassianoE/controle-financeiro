@@ -15,5 +15,5 @@ interface BudgetRepositoryInterface
 
     public function update(Budget $budget, array $data): Budget;
 
-    public function delete(Budget $budget): void;
+    public function delete(Budget $budget): bool;
 }
