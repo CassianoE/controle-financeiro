@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Category;
+use Illuminate\Validation\Rules\Enum;
+use App\Enums\AccountStatus;
 
 class AccountRequest extends FormRequest
 {
@@ -29,6 +31,7 @@ class AccountRequest extends FormRequest
             'name' => 'required|string|max:255',
             'type' => 'required|in:savings,checking,credit,cas,investment,other',
             'balance' => 'required|numeric',
+            'status' => ['required', new Enum(AccountStatus::class)],
         ];
     }
 }
