@@ -25,6 +25,11 @@ class AccountService {
     public function store(array $data,int $userId): Account
     {
         $data['user_id'] = $userId;
+
+        if($data['type'] !== 'credit' && $data['balance'] < 0){
+            throw new \InvalidArgumentException('Saldo inicial não pode ser negativo para contas que não são de crédito.');
+        }
+
         return $this->accountRepository->create($data);
     }
 
@@ -35,6 +40,10 @@ class AccountService {
 
     public function destroy(Account $account): bool
     {
+
+        if ($account->transactions()->exists()) {
+            throw new \Exception('Conta não pode ser excluída, pois possui transações associadas.');
+        }
         return $this->accountRepository->delete($account);
     }
 }

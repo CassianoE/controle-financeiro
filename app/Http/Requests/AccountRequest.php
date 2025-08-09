@@ -28,7 +28,7 @@ class AccountRequest extends FormRequest
             'user_id' => 'exists:users,id',
             'name' => 'required|string|max:255',
             'type' => 'required|in:savings,checking,credit,cas,investment,other',
-            'balance' => 'required|numeric|min:0',
+            'balance' => 'required|numeric',
         ];
     }
 }
