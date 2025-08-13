@@ -52,6 +52,18 @@ class TransactionService
 
     public function delete(int $id)
     {
+        $transaction = $this->transactionRepository->findById($id);
+
+        $account = $this->accountRepository->findById($transaction->account_id);
+
+        if ($transaction->type === 'income') {
+            $account->balance = $account->balance - $transaction->amount;
+        } else {
+            $account->balance = $account->balance + $transaction->amount;
+        }
+
+        $this->accountRepository->update($account, ['balance' => $account->balance]);
+
         return $this->transactionRepository->delete($id);
     }
 
