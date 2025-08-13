@@ -78,6 +78,10 @@ class CategoryController extends Controller
             return response()->json([
                 'message' => 'Categoria não encontrada',
             ], 404);
+        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
+            return response()->json([
+                'message' => 'Você não tem permissão para excluir esta categoria.',
+            ], 403);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Ocorreu um erro ao excluir a categoria',
