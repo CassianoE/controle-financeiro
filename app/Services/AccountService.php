@@ -6,6 +6,10 @@ use App\Repositories\Contracts\AccountRepositoryInterface;
 use App\Models\Account;
 use Illuminate\Support\Collection;
 use App\Enums\AccountStatus;
+use App\Enums\AccountType;
+use App\Exceptions\NegativeBalanceNotAllowedException;
+use App\Exceptions\InvalidAccountStatusException;
+use App\Exceptions\AccountHasTransactionsException;
 
 class AccountService {
 
@@ -26,6 +30,9 @@ class AccountService {
     private function businessRules(array $data, ?Account $account = null): void
     {
         $type = $data['type'] ?? $account?->type;
+        if($type instanceof AccountType){
+            $type = $type->value;
+        }
         $balance = $data['balance'] ?? $account?->balance;
 
         $incomingStatus = $data['status'] ?? null;
@@ -37,12 +44,12 @@ class AccountService {
         $status = $incomingStatus ??
             ($currentStatus instanceof AccountStatus ? $currentStatus->value : $currentStatus);
 
-        if ($type !== 'credit' && $balance < 0) {
-            throw new \Exception('Saldo negativo só é permitido para contas do tipo crédito.');
+        if ($type !== AccountType::CREDIT->value && $balance < 0) {
+            throw new NegativeBalanceNotAllowedException();
         }
 
         if(!in_array($status, AccountStatus::values(), true)){
-            throw new \InvalidArgumentException("Status inválido. Valores permitidos: " . implode(", ", AccountStatus::values()));
+            throw new InvalidAccountStatusException();
         }
     }
 
@@ -63,7 +70,7 @@ class AccountService {
     {
 
         if ($account->transactions()->exists()) {
-            throw new \Exception('Conta não pode ser excluída, pois possui transações associadas.');
+            throw new AccountHasTransactionsException();
         }
         return $this->accountRepository->delete($account);
     }
