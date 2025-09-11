@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Category;
 use Illuminate\Validation\Rules\Enum;
 use App\Enums\AccountStatus;
+use App\Enums\AccountType;
+use App\Models\Account;
 
 class AccountRequest extends FormRequest
 {
@@ -29,7 +31,7 @@ class AccountRequest extends FormRequest
         return [
             'user_id' => 'exists:users,id',
             'name' => 'required|string|max:255',
-            'type' => 'required|in:savings,checking,credit,cas,investment,other',
+            'type' => 'required|in:savings,checking,credit,cash,investment,other',
             'balance' => 'required|numeric',
             'status' => ['required', new Enum(AccountStatus::class)],
         ];
