@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\AccountStatus;
 
 return new class extends Migration
 {
@@ -12,8 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('accounts', function (Blueprint $table) {
-            $table->enum('status', \App\Enums\AccountStatus::values())
-                    ->default(\App\Enums\AccountStatus::ACTIVE)
+            $table->enum('status', AccountStatus::values())
+                    ->default(AccountStatus::ACTIVE)
                     ->after('balance');
     });
 
