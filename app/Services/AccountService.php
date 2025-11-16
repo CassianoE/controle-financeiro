@@ -22,47 +22,26 @@ class AccountService {
         return $this->accountRepository->getAllByUserId($id);
     }
 
-    public function findById (int $id,int $userId): Account
-    {
-        return $this->accountRepository->findById($id, $userId);
-    }
-
-    private function businessRules(array $data, ?Account $account = null): void
-    {
-        $type = $data['type'] ?? $account?->type;
-        if($type instanceof AccountType){
-            $type = $type->value;
-        }
-        $balance = $data['balance'] ?? $account?->balance;
-
-        $incomingStatus = $data['status'] ?? null;
-        if($incomingStatus instanceof AccountStatus){
-            $incomingStatus = $incomingStatus->value;
-        }
-
-        $currentStatus = $account?->status;
-        $status = $incomingStatus ??
-            ($currentStatus instanceof AccountStatus ? $currentStatus->value : $currentStatus);
-
-        if ($type !== AccountType::CREDIT->value && $balance < 0) {
-            throw new NegativeBalanceNotAllowedException();
-        }
-
-        if(!in_array($status, AccountStatus::values(), true)){
-            throw new InvalidAccountStatusException();
-        }
-    }
-
     public function store(array $data,int $userId): Account
     {
-        $data['user_id'] = $userId;
-        $this->businessRules($data);
+        if($data["type"] !== "credit" && $data["balance"] < 0){
+            throw new NegativeBalanceNotAllowedException();
+        }
+        
+        $data["user_id"] = $userId;
+
         return $this->accountRepository->create($data);
     }
 
     public function update(Account $account,array $data): Account
     {
-        $this->businessRules($data,$account);
+        $typeFinal = $data['type'] ?? $account->type;
+        $balanceFinal = $data['balance'] ?? $account->balance;
+
+        if($typeFinal !== "credit" && $balanceFinal < 0){
+            throw new NegativeBalanceNotAllowedException();
+        }
+
         return $this->accountRepository->update($account,$data);
     }
 
