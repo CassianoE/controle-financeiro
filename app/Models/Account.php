@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\AccountType;
 use App\Enums\AccountStatus;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Account extends Model
 {
@@ -20,6 +21,7 @@ class Account extends Model
 
     protected $casts = [
         'status' => AccountStatus::class,
+        'type' => AccountType::class
         ];
 
     public function user()
