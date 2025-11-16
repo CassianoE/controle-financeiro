@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Handler extends ExceptionHandler
 {
@@ -26,5 +27,21 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $e)
+    {   
+    // Tratamento de ModelNotFoundException (findOrFail, firstOrFail, route model binding)
+        if ($e instanceof ModelNotFoundException) {
+
+            // Nome do model sem namespace (ex: "Account")
+            $model = class_basename($e->getModel());
+
+            return response()->json([
+            'message' => "{$model} não encontrado.",
+        ], 404);
+        }
+
+        return parent::render($request, $e);
     }
 }
