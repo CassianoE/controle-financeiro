@@ -12,14 +12,10 @@ class AccountRepository implements AccountRepositoryInterface {
 
     public function getAllByUserId(int $userId): Collection
     {
-        return Account::where('user_id', $userId)->get();
-    }
+        return Account::query()
+            ->where("user_id", $userId)
+            ->get();
 
-    public function findById(int $id,int $userId): Account
-    {
-        return Account::where('id', $id)
-            ->where('user_id', $userId)
-            ->firstOrFail();
     }
 
     public function create(array $data): Account
