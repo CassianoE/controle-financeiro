@@ -33,5 +33,15 @@ class Account extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+
+    public function deposit(float $amount)
+    {
+        $this->balance += $amount;
+    }
+
+    public function withdraw(float $amount)
+    {
+        $this->balance -= $amount;
+    }
 }
 
