@@ -2,8 +2,6 @@
 
 namespace App\DTOs;
 
-use Illuminate\Support\Facades\Auth;
-
 class CreateTransactionDTO
 {
     public function __construct(
@@ -27,7 +25,6 @@ class CreateTransactionDTO
             category_id: (int) $data['category_id'],
             account_id: (int) $data['account_id'],
             description: $data['description'] ?? null,
-            user_id: Auth::id()
         );
     }
 
@@ -36,17 +33,12 @@ class CreateTransactionDTO
         return [
             'title' => $this->title,
             'amount' => $this->amount,
-            'date' => $this->date,  // Garantindo que o campo date está sendo incluído
+            'date' => $this->date,  
             'type' => $this->type,
             'category_id' => $this->category_id,
             'description' => $this->description,
             'user_id' => $this->user_id,
             'account_id' => $this->account_id
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }
