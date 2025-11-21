@@ -3,17 +3,25 @@
 namespace App\Repositories;
 
 use App\Models\Transaction;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use App\Repositories\Contracts\TransactionRepositoryInterface;
 
 class TransactionRepository implements TransactionRepositoryInterface
 {
-    public function getAll(): Collection
+    public function getAll($userId, ?int $accountId = null): Collection
     {
-        return Transaction::all();
+        $query = Transaction::query()
+            ->where("user_id",$userId);
+
+        if($accountId){
+            $query->where("account_id", $accountId);
+        }
+
+        return $query->get();
     }
 
-    public function findById(int $id)
+    public function findById(int $id): Transaction
     {
         return Transaction::findOrFail($id);
     }
@@ -30,9 +38,8 @@ class TransactionRepository implements TransactionRepositoryInterface
         return $transaction;
     }
 
-    public function delete(int $id)
+    public function delete(Transaction $transaction)
     {
-        $transaction = $this->findById($id);
         $transaction->delete();
     }
 

@@ -2,22 +2,28 @@
 
 namespace App\Services;
 
+use App\Models\Category;
+use App\Models\Transaction;
+use App\Services\AccountService;
 use App\DTOs\CreateTransactionDTO;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Repositories\Contracts\TransactionRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
+use App\Exceptions\UnauthorizedAccountAccessException;
 use App\Repositories\Contracts\AccountRepositoryInterface;
+use App\Repositories\Contracts\TransactionRepositoryInterface;
 
 class TransactionService
 {
     public function __construct(
         private TransactionRepositoryInterface $transactionRepository,
-        private AccountRepositoryInterface $accountRepository
+        private AccountService $accountService,
+        private AccountRepositoryInterface $accountRepository,
     ) {}
 
-    public function getAll()
+    public function getAll($userId, ?int $accountId = null)
     {
-        return $this->transactionRepository->getAll();
+        return $this->transactionRepository->getAll($userId, $accountId);
     }
 
     public function findById(int $id)
@@ -25,34 +31,68 @@ class TransactionService
         return $this->transactionRepository->findById($id);
     }
 
-    public function create(array $data)
+    public function create(array $data, int $userId)
     {
-        
+        return DB::transaction(function () use ($data, $userId) {
+
         $transactionDTO = CreateTransactionDTO::fromArray($data);
+        $transactionDTO->user_id = $userId;
+
+        $account = $this->accountRepository->findById($transactionDTO->account_id);
+
+        if ($account->user_id !== $userId) {
+            throw new UnauthorizedAccountAccessException();
+        }
 
         $newTransaction = $this->transactionRepository->create($transactionDTO->toArray());
 
-        $account = $this->accountRepository->findById($newTransaction->account_id);
-
         if ($newTransaction->type === 'income') {
-            $account->balance = $account->balance + $newTransaction->amount;
+             $account->deposit($newTransaction->amount);
         } else {
-            $account->balance = $account->balance - $newTransaction->amount;
+            $account->withdraw($newTransaction->amount);
         }
 
-        $this->accountRepository->update($account,['balance' => $account->balance]);
+        $this->accountRepository->update($account, [
+            'balance' => $account->balance
+        ]);
 
-        return $newTransaction;       
+        return $newTransaction;
+        });
     }
 
-    public function update(int $id, array $data)
+    public function update(int $transactionId, array $data, int $userId)
     {
-        return $this->transactionRepository->update($id, $data);
+        return DB::transaction(function () use ($transactionId, $data, $userId){
+
+            $transaction = $this->transactionRepository->findById($transactionId);
+            $account = $this->accountRepository->findById($transaction->account_id);
+
+             if ($transaction->type === 'income') {
+                 $account->withdraw($transaction->amount); 
+             } else {
+                 $account->deposit($transaction->amount);
+             }
+
+        $transactionUpdated = $this->transactionRepository->update($transaction->id, $data);
+
+             if ($transactionUpdated->type === 'income') {
+                $account->deposit($transactionUpdated->amount);
+             } else {
+                 $account->withdraw($transactionUpdated->amount);
+             }
+
+        $this->accountRepository->update($account,[
+            'balance' => $account->balance
+        ]);
+
+        return $transactionUpdated;
+
+        });
     }
 
-    public function delete(int $id)
+    public function delete(Transaction $transaction)
     {
-        return $this->transactionRepository->delete($id);
+        return $this->transactionRepository->delete($transaction);
     }
 
     public function getbyPeriod(int $userId, ?String $startDate, ?String $endDate): Collection
