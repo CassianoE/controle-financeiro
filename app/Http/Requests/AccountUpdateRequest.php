@@ -12,20 +12,16 @@ class AccountUpdateRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $account_id_from_url = $this->route('account');
-
-        $account = Account::find($account_id_from_url);
-
-        return $account && $account->user_id === $this->user()->id;
+        return true;
     }
 
     public function rules(): array
     {
         return [
-            'name' => ["sometimes","string","max:255"],
-            'type' => ["sometimes",new Enum(AccountType::class)],
-            'balance' => ["sometimes", "numeric"],
-            'status' => ['sometimes', new Enum(AccountStatus::class)],
+            "name" => ["sometimes", "string", "max:255"],
+            "type" => ["sometimes", new Enum(AccountType::class)],
+            "balance" => ["sometimes", "numeric"],
+            "status" => ["sometimes", new Enum(AccountStatus::class)],
         ];
     }
 }
