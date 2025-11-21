@@ -21,9 +21,9 @@ class TransactionService
         private AccountRepositoryInterface $accountRepository,
     ) {}
 
-    public function getAll($userId, ?int $accountId = null)
+    public function getAll($userId, ?int $accountId = null, ?int $categoryId = null)
     {
-        return $this->transactionRepository->getAll($userId, $accountId);
+        return $this->transactionRepository->getAll($userId, $accountId, $categoryId);
     }
 
     public function findById(int $id)

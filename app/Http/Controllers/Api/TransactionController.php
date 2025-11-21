@@ -25,8 +25,9 @@ class TransactionController extends Controller
     {
        $userId = $request->user()->id;
        $accountId = $request->query("account_id");
+       $categoryId = $request->query("category_id");
 
-       $transactions = $this->transactionService->getAll($userId, $accountId);
+       $transactions = $this->transactionService->getAll($userId, $accountId, $categoryId);
 
        return response()->json($transactions,200);
     }
