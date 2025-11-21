@@ -9,14 +9,16 @@ use App\Repositories\Contracts\TransactionRepositoryInterface;
 
 class TransactionRepository implements TransactionRepositoryInterface
 {
-    public function getAll($userId, ?int $accountId = null): Collection
+    public function getAll($userId, ?int $accountId = null, ?int $categoryId = null): Collection
     {
         $query = Transaction::query()
-            ->where("user_id",$userId);
-
-        if($accountId){
-            $query->where("account_id", $accountId);
-        }
+            ->where("user_id",$userId)
+            ->when($accountId, function($query, $accountId) {
+                $query->where("account_id", $accountId);
+            })
+            ->when($categoryId, function($query, $categoryId) {
+                $query->where("category_id", $categoryId);
+            });
 
         return $query->get();
     }
