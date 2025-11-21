@@ -2,26 +2,19 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Category;
+use App\Enums\CategoryType;
 
-class CategoryRequest extends FormRequest
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
+
+class CategoryCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-
-    $category_id_from_url = $this->route('category'); 
-
-    if (empty($category_id_from_url)) {
         return true;
-    }
-
-    $category = Category::find($category_id_from_url);
-
-    return $category && $category->user_id === $this->user()->id;
     }
 
     /**
@@ -32,8 +25,9 @@ class CategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'type' => 'required|in:income,expense',
+            'name' => ['required', 'string', 'max:255'],
+            'type' => ['required', new Enum(CategoryType::class)],
+            'account_id' => ['exists:accounts,id', 'required']
         ];
     }
 }

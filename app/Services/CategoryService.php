@@ -12,22 +12,27 @@ class CategoryService
 
     public function __construct(
         protected CategoryRepository $categoryRepository
-    ) {}
-
-    public function list (int $userId): Collection
-    {
-        return $this->categoryRepository->getAllByUserId($userId);
+    ) {
     }
 
-    public function store (array $data): Category
+    public function list(int $userId, ?int $accountId = null): Collection
     {
-       $categoryDTO = CreateCategoryDTO::fromArray($data);
-       return $this->categoryRepository->create($categoryDTO->toArray());
+        return $this->categoryRepository->getAll($userId, $accountId);
+    }
+
+    public function store(array $data, int $userId): Category
+    {
+        $categoryDTO = CreateCategoryDTO::fromArray($data);
+
+        return $this->categoryRepository->create([
+            ...$categoryDTO->toArray(),
+            "user_id" => $userId
+        ]);
     }
 
     public function findById(int $id): Category
     {
-        return $this->categoryRepository->find($id);
+        return $this->categoryRepository->findById($id);
     }
 
     public function show(int $id): Category
@@ -35,7 +40,7 @@ class CategoryService
         return $this->categoryRepository->show($id);
     }
 
-    public function update(Category $category, array $data): Category
+    public function update(array $data, Category $category): Category
     {
         return $this->categoryRepository->update($category, $data);
     }
@@ -46,6 +51,6 @@ class CategoryService
     }
 
 
-    
+
 }
 
