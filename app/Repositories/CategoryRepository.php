@@ -8,12 +8,19 @@ use Illuminate\Support\Collection;
 class CategoryRepository
 {
 
-    public function getAllByUserId(int $userId): Collection
+    public function getAll(int $userId, ?int $accountId = null): Collection
     {
-        return Category::where('user_id', $userId)->get();
+        $query = Category::query()
+        ->where("user_id", $userId);
+
+        if($accountId){
+            $query->where("account_id", $accountId);
+        }
+        
+        return $query->get();
     }
 
-    public function find(int $id): Category
+    public function findById(int $id): Category
     {
         return Category::findOrFail($id);
     }
