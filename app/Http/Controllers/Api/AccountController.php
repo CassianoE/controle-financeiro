@@ -9,12 +9,14 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountCreateRequest;
 use App\Http\Requests\AccountUpdateRequest;
+use App\Policies\AccountPolicy;
 
 
 class AccountController extends Controller
 {
     public function __construct(
-        protected AccountService $accountService
+        protected AccountService $accountService,
+        protected AccountPolicy $accountPolicy
     ) {
     }
 
@@ -40,11 +42,14 @@ class AccountController extends Controller
 
     public function show(Request $request, Account $account): JsonResponse
     {
-    return response()->json($account);
+        $this->authorize('view', $account);
+
+        return response()->json($account);
     }
 
     public function update(AccountUpdateRequest $request ,Account $account): JsonResponse
     {
+        $this->authorize("update", $account);
         $data = $request->validated();
 
         $accountUpdated = $this->accountService->update($account ,$data);
@@ -54,6 +59,7 @@ class AccountController extends Controller
 
     public function destroy(Request $request ,Account $account)
     {
+        $this->authorize("delete", $account);
         $this->accountService->destroy($account);
 
         return response()->noContent();
