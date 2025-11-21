@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\AccountType;
 use App\Enums\AccountStatus;
+use App\Exceptions\NegativeBalanceNotAllowedException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -41,7 +42,13 @@ class Account extends Model
 
     public function withdraw(float $amount)
     {
-        $this->balance -= $amount;
+        $newBalance = $this->balance - $amount;
+
+        if($this->type !== AccountType::CREDIT && $newBalance < 0){
+            throw new NegativeBalanceNotAllowedException();
+        }
+
+        $this->balance = $newBalance;
     }
 }
 

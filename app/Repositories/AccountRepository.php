@@ -18,6 +18,13 @@ class AccountRepository implements AccountRepositoryInterface {
 
     }
 
+    public function findById(int $id): Account
+    {
+        return Account::query()
+            ->where("id", $id)
+            ->firstOrFail();
+    }
+
     public function create(array $data): Account
     {
         return Account::create($data);

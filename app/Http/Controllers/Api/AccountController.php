@@ -13,9 +13,9 @@ use App\Http\Requests\AccountUpdateRequest;
 
 class AccountController extends Controller
 {
-    public function __construct(AccountService $accountService){
-        $this->accountService = $accountService;
-        $this->authorizeResource(Account::class, 'account');
+    public function __construct(
+        protected AccountService $accountService
+    ) {
     }
 
 

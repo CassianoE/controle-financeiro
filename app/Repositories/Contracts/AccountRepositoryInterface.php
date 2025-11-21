@@ -14,4 +14,6 @@ interface AccountRepositoryInterface {
     public function update(Account $account,array $data): Account;
 
     public function delete(Account $account): bool;
+
+    public function findById(int $id): Account;
 }

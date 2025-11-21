@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Rotas de recurso
     Route::apiResource('categories', CategoryController::class);
-    Route::apiResource('transactions', TransactionController::class)->except(['show']);
+    Route::apiResource('transactions', TransactionController::class);
     Route::apiResource('accounts', AccountController::class);
     Route::apiResource('budgets', BudgetController::class);
 });
