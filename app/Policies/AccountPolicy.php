@@ -13,15 +13,17 @@ class AccountPolicy
      */
     public function viewAny(User $user): bool
     {
-       return true;
+        return true;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Account $account): bool
+    public function view(User $user, Account $account)
     {
-        return $account->user_id === $user->id;
+        return $account->user_id === $user->id
+            ? Response::allow()
+            : Response::deny("Você não tem permissão para acessar esta conta.");
     }
 
     /**
@@ -29,23 +31,27 @@ class AccountPolicy
      */
     public function create(User $user): bool
     {
-      return true;
+        return true;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Account $account): bool
+    public function update(User $user, Account $account)
     {
-        return $account->user_id === $user->id;
+        return $account->user_id === $user->id
+            ? Response::allow()
+            : Response::deny("Você não tem permissão para atualizar esta conta.",);
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Account $account): bool
+    public function delete(User $user, Account $account)
     {
-        return $account->user_id === $user->id;
+        return $account->user_id === $user->id
+            ? Response::allow()
+            : Response::deny("Você não tem permissão para deletar esta conta.",);
     }
 
     /**
