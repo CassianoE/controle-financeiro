@@ -6,18 +6,15 @@ use App\Models\Category;
 use App\Enums\CategoryType;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryRequest extends FormRequest
+class CategoryUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-    $category_id_from_url = $this->route('category'); 
-
-    $category = Category::find($category_id_from_url);
-
-    return $category && $category->user_id === $this->user()->id;
+        
+    return true;
     }
 
     /**
