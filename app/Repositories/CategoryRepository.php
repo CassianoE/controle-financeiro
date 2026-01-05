@@ -4,8 +4,9 @@ namespace App\Repositories;
 
 use App\Models\Category;
 use Illuminate\Support\Collection;
+use App\Repositories\Contracts\CategoryRepositoryInterface;
 
-class CategoryRepository
+class CategoryRepository implements CategoryRepositoryInterface
 {
 
     public function getAll(int $userId, ?int $accountId = null): Collection

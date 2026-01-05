@@ -4,14 +4,14 @@ namespace App\Services;
 
 use App\DTOs\CreateCategoryDTO;
 use App\Models\Category;
-use App\Repositories\CategoryRepository;
+use App\Repositories\Contracts\CategoryRepositoryInterface;
 use Illuminate\Support\Collection;
 
 class CategoryService
 {
 
     public function __construct(
-        protected CategoryRepository $categoryRepository
+        protected CategoryRepositoryInterface $categoryRepository
     ) {
     }
 
