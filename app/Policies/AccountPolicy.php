@@ -41,7 +41,7 @@ class AccountPolicy
     {
         return $account->user_id === $user->id
             ? Response::allow()
-            : Response::deny("Você não tem permissão para atualizar esta conta.",);
+            : Response::deny("Você não tem permissão para atualizar esta conta.");
     }
 
     /**
@@ -51,7 +51,7 @@ class AccountPolicy
     {
         return $account->user_id === $user->id
             ? Response::allow()
-            : Response::deny("Você não tem permissão para deletar esta conta.",);
+            : Response::deny("Você não tem permissão para deletar esta conta.");
     }
 
     /**
