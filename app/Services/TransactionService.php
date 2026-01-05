@@ -74,7 +74,15 @@ class TransactionService
         return DB::transaction(function () use ($transactionId, $data, $userId){
 
             $transaction = $this->transactionRepository->findById($transactionId);
-            $account = $this->accountRepository->findById($transaction->account_id);
+            $oldAccount = $this->accountRepository->findById($transaction->account_id);
+
+            if (isset($data['account_id'])) {
+                $newAccount = $this->accountRepository->findById($data['account_id']);
+
+                if ($newAccount->user_id !== $userId) {
+                    throw new UnauthorizedAccountAccessException();
+                }
+            }
 
             if (isset($data['category_id'])) {
                 $category = $this->categoryRepository->findById($data['category_id']);
@@ -84,25 +92,37 @@ class TransactionService
                 }
             }
 
-             if ($transaction->type === 'income') {
-                 $account->withdraw($transaction->amount); 
-             } else {
-                 $account->deposit($transaction->amount);
-             }
+            // Reverte o saldo da conta antiga
+            if ($transaction->type === 'income') {
+                $oldAccount->withdraw($transaction->amount); 
+            } else {
+                $oldAccount->deposit($transaction->amount);
+            }
 
-        $transactionUpdated = $this->transactionRepository->update($transaction->id, $data);
+            $this->accountRepository->update($oldAccount, [
+                'balance' => $oldAccount->balance
+            ]);
 
-             if ($transactionUpdated->type === 'income') {
-                $account->deposit($transactionUpdated->amount);
-             } else {
-                 $account->withdraw($transactionUpdated->amount);
-             }
+            // Atualiza a transação
+            $transactionUpdated = $this->transactionRepository->update($transaction->id, $data);
 
-        $this->accountRepository->update($account,[
-            'balance' => $account->balance
-        ]);
+            // Determina qual conta usar (nova se mudou, senão a antiga)
+            $accountToUpdate = isset($data['account_id']) && $data['account_id'] !== $transaction->account_id
+                ? $this->accountRepository->findById($data['account_id'])
+                : $oldAccount;
 
-        return $transactionUpdated;
+            // Aplica o novo saldo na conta correta
+            if ($transactionUpdated->type === 'income') {
+                $accountToUpdate->deposit($transactionUpdated->amount);
+            } else {
+                $accountToUpdate->withdraw($transactionUpdated->amount);
+            }
+
+            $this->accountRepository->update($accountToUpdate, [
+                'balance' => $accountToUpdate->balance
+            ]);
+
+            return $transactionUpdated;
 
         });
     }
