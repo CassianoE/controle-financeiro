@@ -61,7 +61,9 @@ class BudgetController extends Controller
     {
         $this->authorize('delete', $budget);
         $this->budgetService->delete($budget);
-
-        return response()->noContent();
+    
+        return response()->json([
+            "message" => "Orçamento deletado com sucesso"
+        ], 200);
     }
 }
