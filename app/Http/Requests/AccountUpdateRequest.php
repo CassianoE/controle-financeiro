@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 use App\Enums\AccountStatus;
 use App\Enums\AccountType;
-use App\Models\Account;
 
 class AccountUpdateRequest extends FormRequest
 {

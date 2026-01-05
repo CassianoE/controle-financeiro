@@ -2,12 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\Category;
 use App\Models\Transaction;
-use App\Services\AccountService;
 use App\DTOs\CreateTransactionDTO;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
 use App\Exceptions\UnauthorizedAccountAccessException;
 use App\Exceptions\UnauthorizedCategoryAccessException;
@@ -19,7 +16,6 @@ class TransactionService
 {
     public function __construct(
         private TransactionRepositoryInterface $transactionRepository,
-        private AccountService $accountService,
         private AccountRepositoryInterface $accountRepository,
         private CategoryRepositoryInterface $categoryRepository,
     ) {}

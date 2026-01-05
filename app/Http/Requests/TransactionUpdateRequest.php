@@ -3,8 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Category; 
-use App\Models\Account;  
 
 class TransactionUpdateRequest extends FormRequest
 {

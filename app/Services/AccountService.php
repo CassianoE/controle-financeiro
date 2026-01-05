@@ -5,10 +5,7 @@ namespace App\Services;
 use App\Repositories\Contracts\AccountRepositoryInterface;
 use App\Models\Account;
 use Illuminate\Support\Collection;
-use App\Enums\AccountStatus;
-use App\Enums\AccountType;
 use App\Exceptions\NegativeBalanceNotAllowedException;
-use App\Exceptions\InvalidAccountStatusException;
 use App\Exceptions\AccountHasTransactionsException;
 
 class AccountService {

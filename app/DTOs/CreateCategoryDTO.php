@@ -3,8 +3,6 @@
 namespace App\DTOs;
 
 use App\Enums\CategoryType;
-use Illuminate\Support\Facades\Auth;
-
 
 class CreateCategoryDTO
 {
