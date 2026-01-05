@@ -1,25 +1,25 @@
 meta {
-  name: GetById
+  name: CreateBudget
   type: http
-  seq: 4
+  seq: 2
 }
 
-get {
-  url: {{localhost}}/api/accounts/1
+post {
+  url: {{localhost}}/api/budgets
   body: json
   auth: bearer
-}
-
-headers {
-  Accept: application/json
 }
 
 auth:bearer {
   token: 2|jZhDiygxTLpw3AsU3vVePh5arSbdUbRuduiXjimhb8c2f9c8
 }
 
-vars:pre-request {
-  localhost: http://127.0.0.1:8000
+body:json {
+  {
+      "category_id": 1,
+      "amount": 5000.00,
+      "date": "2024-01-15"
+    }
 }
 
 settings {

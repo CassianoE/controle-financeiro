@@ -1,25 +1,17 @@
 meta {
   name: GetById
   type: http
-  seq: 4
+  seq: 3
 }
 
 get {
-  url: {{localhost}}/api/accounts/1
-  body: json
+  url: {{localhost}}/api/budgets/1
+  body: none
   auth: bearer
-}
-
-headers {
-  Accept: application/json
 }
 
 auth:bearer {
   token: 2|jZhDiygxTLpw3AsU3vVePh5arSbdUbRuduiXjimhb8c2f9c8
-}
-
-vars:pre-request {
-  localhost: http://127.0.0.1:8000
 }
 
 settings {
