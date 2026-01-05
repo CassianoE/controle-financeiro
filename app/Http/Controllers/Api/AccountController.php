@@ -60,7 +60,7 @@ class AccountController extends Controller
     public function destroy(Request $request ,Account $account): JsonResponse
     {
         $this->authorize("delete", $account);
-        $this->accountService->destroy($account);
+        $this->accountService->delete($account);
 
         return response()->json([
             "message" => "Conta deletada com sucesso"

@@ -21,7 +21,7 @@ class TransactionController extends Controller
         protected TransactionService $transactionService
     ) {}
 
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
        $userId = $request->user()->id;
        $accountId = $request->query("account_id");
@@ -43,7 +43,7 @@ class TransactionController extends Controller
         ],201);
     }
 
-    public function update(TransactionUpdateRequest $request, Transaction $transaction)
+    public function update(TransactionUpdateRequest $request, Transaction $transaction): JsonResponse
     {
         $this->authorize("update", $transaction);
         $data = $request->validated();
@@ -66,7 +66,7 @@ class TransactionController extends Controller
         ], 200);
     }
 
-    public function destroy(Transaction $transaction)
+    public function destroy(Transaction $transaction): JsonResponse
     {
        $this->authorize("delete", $transaction);
        $this->transactionService->delete($transaction);
@@ -76,7 +76,7 @@ class TransactionController extends Controller
        ], 200);
     }
 
-    public function getByPeriod(Request $request)
+    public function getByPeriod(Request $request): JsonResponse
     {
         $transactions = $this->transactionService->getbyPeriod($request->user()->id, $request->startDate, $request->endDate);
 
@@ -86,7 +86,7 @@ class TransactionController extends Controller
         ], 200);
     }
 
-    public function getSummaryByPeriod(Request $request)
+    public function getSummaryByPeriod(Request $request): JsonResponse
     {
         $summary = $this->transactionService->getSummaryByPeriod(Auth::id(), $request->startDate, $request->endDate);
 

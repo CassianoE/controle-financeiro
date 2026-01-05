@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Account;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Policies\CategoryPolicy;
 use App\Services\CategoryService;
 use App\Http\Controllers\Controller;
@@ -25,7 +26,7 @@ class CategoryController extends Controller
     }
 
 
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $userId = $request->user()->id;
         $accountId = $request->query("account_id");
@@ -34,7 +35,7 @@ class CategoryController extends Controller
         return response()->json($categories, 200);
     }
 
-    public function store(CategoryCreateRequest $request)
+    public function store(CategoryCreateRequest $request): JsonResponse
     {
         $data = $request->validated();
         $userId = $request->user()->id;
@@ -46,7 +47,7 @@ class CategoryController extends Controller
         ],200);
     }
 
-    public function show(Request $request, Category $category)
+    public function show(Request $request, Category $category): JsonResponse
     {
         $this->authorize("view", $category);
 
@@ -55,7 +56,7 @@ class CategoryController extends Controller
         ], 200);
     }
 
-    public function update(CategoryUpdateRequest $request, Category $category)
+    public function update(CategoryUpdateRequest $request, Category $category): JsonResponse
     {
         $this->authorize("update", $category);
         $data = $request->validated();
@@ -65,7 +66,7 @@ class CategoryController extends Controller
         return response()->json($categoryUpdated, 200);
     }
 
-    public function destroy(Category $category)
+    public function destroy(Category $category): JsonResponse
     {
         $this->authorize("delete", $category);
         $this->categoryService->delete($category);

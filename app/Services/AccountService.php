@@ -45,9 +45,8 @@ class AccountService {
         return $this->accountRepository->update($account,$data);
     }
 
-    public function destroy(Account $account): bool
+    public function delete(Account $account): bool
     {
-
         if ($account->transactions()->exists()) {
             throw new AccountHasTransactionsException();
         }
