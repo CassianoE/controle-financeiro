@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
 use App\Exceptions\UnauthorizedAccountAccessException;
+use App\Exceptions\UnauthorizedCategoryAccessException;
 use App\Repositories\Contracts\AccountRepositoryInterface;
+use App\Repositories\Contracts\CategoryRepositoryInterface;
 use App\Repositories\Contracts\TransactionRepositoryInterface;
 
 class TransactionService
@@ -19,6 +21,7 @@ class TransactionService
         private TransactionRepositoryInterface $transactionRepository,
         private AccountService $accountService,
         private AccountRepositoryInterface $accountRepository,
+        private CategoryRepositoryInterface $categoryRepository,
     ) {}
 
     public function getAll($userId, ?int $accountId = null, ?int $categoryId = null)
@@ -44,6 +47,12 @@ class TransactionService
             throw new UnauthorizedAccountAccessException();
         }
 
+        $category = $this->categoryRepository->findById($transactionDTO->category_id);
+
+        if ($category->user_id !== $userId) {
+            throw new UnauthorizedCategoryAccessException();
+        }
+
         $newTransaction = $this->transactionRepository->create($transactionDTO->toArray());
 
         if ($newTransaction->type === 'income') {
@@ -66,6 +75,14 @@ class TransactionService
 
             $transaction = $this->transactionRepository->findById($transactionId);
             $account = $this->accountRepository->findById($transaction->account_id);
+
+            if (isset($data['category_id'])) {
+                $category = $this->categoryRepository->findById($data['category_id']);
+
+                if ($category->user_id !== $userId) {
+                    throw new UnauthorizedCategoryAccessException();
+                }
+            }
 
              if ($transaction->type === 'income') {
                  $account->withdraw($transaction->amount); 
