@@ -5,17 +5,22 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Budget;
-use App\Http\Requests\BudgetRequest;
+use App\Http\Requests\BudgetCreateRequest;
+use App\Http\Requests\BudgetUpdateRequest;
 use App\Services\BudgetService;
+use App\Policies\BudgetPolicy;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class BudgetController extends Controller
 {
+    use AuthorizesRequests;
 
-    public function __construct(BudgetService $budgetService){
-        $this->budgetService = $budgetService;
+    public function __construct(
+        protected BudgetService $budgetService,
+        protected BudgetPolicy $budgetPolicy
+    ) {
     }
-
 
     public function index(Request $request): JsonResponse
     {
@@ -26,7 +31,7 @@ class BudgetController extends Controller
         return response()->json($budgets, 200);
     }
 
-    public function store(BudgetRequest $request): JsonResponse
+    public function store(BudgetCreateRequest $request): JsonResponse
     {
         $userId = $request->user()->id;
         $data = $request->validated();
@@ -35,29 +40,28 @@ class BudgetController extends Controller
         return response()->json($budget, 201);
     }
 
-    public function show(string $budgetId, BudgetRequest $request): JsonResponse
+    public function show(Request $request, Budget $budget): JsonResponse
     {
-        $userId = $request->user()->id;
-        $budget = $this->budgetService->findById($budgetId, $userId);
+        $this->authorize('view', $budget);
 
         return response()->json($budget, 200);
     }
 
-
-    public function update(BudgetRequest $request, Budget $budget): JsonResponse
+    public function update(BudgetUpdateRequest $request, Budget $budget): JsonResponse
     {
+        $this->authorize('update', $budget);
         $data = $request->validated();
 
         $budgetUpdated = $this->budgetService->update($budget, $data);
 
         return response()->json($budgetUpdated, 200);
-
     }
 
-    public function destroy(BudgetRequest $request, Budget $budget): JsonResponse
+    public function destroy(Request $request, Budget $budget): JsonResponse
     {
+        $this->authorize('delete', $budget);
         $this->budgetService->delete($budget);
 
-        return response()->noContent(204);
+        return response()->noContent();
     }
 }
