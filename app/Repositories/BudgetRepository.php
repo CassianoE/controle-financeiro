@@ -23,7 +23,7 @@ class BudgetRepository implements BudgetRepositoryInterface
 
     public function create(array $data): Budget
     {
-    return Budget::create($data);
+        return Budget::create($data);
     }
 
     public function update(Budget $budget, array $data): Budget
@@ -36,6 +36,4 @@ class BudgetRepository implements BudgetRepositoryInterface
     {
         return $budget->delete();
     }
-
-
 }

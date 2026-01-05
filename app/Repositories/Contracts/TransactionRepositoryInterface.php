@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 
 interface TransactionRepositoryInterface
 {
-    public function getAll($userId, ?int $accountId = null): Collection;
+    public function getAll($userId, ?int $accountId = null, ?int $categoryId = null): Collection;
     public function findById(int $id): Transaction;
     public function create(array $data);
     public function update(int $id, array $data);

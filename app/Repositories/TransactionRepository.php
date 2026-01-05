@@ -45,10 +45,8 @@ class TransactionRepository implements TransactionRepositoryInterface
         $transaction->delete();
     }
 
-
     public function queryByPeriod(int $userId, ?String $startDate, ?String $endDate): Collection
     {
-
         $query = Transaction::where('user_id', $userId);
 
         if($startDate){ 
@@ -80,7 +78,4 @@ class TransactionRepository implements TransactionRepositoryInterface
             'balance' => $income - $expense
         ];
     }
-
-    
-    
 }
