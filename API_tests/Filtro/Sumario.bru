@@ -1,0 +1,28 @@
+meta {
+  name: Sumario
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{localhost}}api/transactions/period?startDate=2025-01-01&endDate=2025-05-31
+  body: json
+  auth: bearer
+}
+
+params:query {
+  startDate: 2025-01-01
+  endDate: 2025-05-31
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: 1|GHJnIxwDvpEKLyLfd3FNbsyhlCwCulMwZ0g9x73fab30e815
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,32 @@
+meta {
+  name: Criar account
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{localhost}}/api/accounts
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: 8|QpFq4aBtyimarkfKhItCYqVXBj8nNjrxLc6kAsdm9933d50d
+}
+
+body:json {
+  {
+      "name": "Conta Corrente",
+      "type": "cash",
+      "status": "active",
+      "balance": 1000.00
+  }
+}
+
+settings {
+  encodeUrl: true
+}

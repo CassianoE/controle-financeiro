@@ -1,0 +1,33 @@
+meta {
+  name: login
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{localhost}}/api/auth/login
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjYXNzaWFubyIsImV4cCI6MTc0MjM1Mjk5NH0.ELWbvdT5ETtmdlZNdx9B2Vt3ZoEY3YGSZdA2q5BsQG0
+}
+
+body:json {
+  {
+      "email": "cassiano@outlook.com",
+      "password": "cassiano"
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

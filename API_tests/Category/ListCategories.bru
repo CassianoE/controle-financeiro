@@ -1,0 +1,23 @@
+meta {
+  name: ListCategories
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{localhost}}/api/categories
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: 11|8WtxpzSr0k2exnbYFwmlFBsK8AFaSYwsPkm4XfXI978afdf7
+}
+
+settings {
+  encodeUrl: true
+}

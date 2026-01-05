@@ -1,0 +1,24 @@
+meta {
+  name: GetAll
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{localhost}}/api/accounts
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: 1|SJQwGxSzCzPYNd1PcYJsOhhHpxmv8I7UQyy3MVQ9b6f3e7d9
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

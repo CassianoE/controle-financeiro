@@ -1,0 +1,23 @@
+meta {
+  name: Deletar Transaction
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{localhost}}api/transactions/7
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: 1|GHJnIxwDvpEKLyLfd3FNbsyhlCwCulMwZ0g9x73fab30e815
+}
+
+settings {
+  encodeUrl: true
+}

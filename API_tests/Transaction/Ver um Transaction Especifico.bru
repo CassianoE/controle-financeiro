@@ -1,0 +1,23 @@
+meta {
+  name: Ver um Transaction Especifico
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{localhost}}/api/transactions/2
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: 4|8twsVJXlouROIN86Crh4WRGYleVqX3TXTCHGhhnBb4813f13
+}
+
+settings {
+  encodeUrl: true
+}

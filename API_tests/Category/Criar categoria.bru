@@ -1,0 +1,31 @@
+meta {
+  name: Criar categoria
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{localhost}}/api/categories
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: 6|ydEvR8BaiUqIuNyxvlC750JH0ywFYnry4yAnJclb53c61489
+}
+
+body:json {
+  {
+    "name": "Salario",
+    "type": "income",
+    "account_id": 1
+  }
+}
+
+settings {
+  encodeUrl: true
+}

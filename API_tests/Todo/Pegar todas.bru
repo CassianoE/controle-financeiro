@@ -1,0 +1,15 @@
+meta {
+  name: Pegar todas
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:3001/api/todos
+  body: json
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

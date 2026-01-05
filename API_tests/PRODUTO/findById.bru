@@ -1,0 +1,32 @@
+meta {
+  name: findById
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8080/api/produto/findById/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjYXNzaWFubyIsImV4cCI6MTc0MjM1Mjk5NH0.ELWbvdT5ETtmdlZNdx9B2Vt3ZoEY3YGSZdA2q5BsQG0
+}
+
+script:post-response {
+  test("Successful POST request", function () {
+      expect(res.getStatus()).to.be.oneOf([200, 201]);
+  });
+  
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.
+  
+  A successful POST request typically returns a `200 OK` or `201 Created` response code.
+}

@@ -1,0 +1,28 @@
+meta {
+  name: Listar
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{localhost}}/api/transactions?account_id=1&category_id=9
+  body: json
+  auth: bearer
+}
+
+params:query {
+  account_id: 1
+  category_id: 9
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: 4|8twsVJXlouROIN86Crh4WRGYleVqX3TXTCHGhhnBb4813f13
+}
+
+settings {
+  encodeUrl: true
+}

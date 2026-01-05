@@ -1,0 +1,35 @@
+meta {
+  name: Criar
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{localhost}}/api/transactions
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: 3|OMg7YsAR2uTlzey2BVf351Ec869PSGvJdPwn6ccmd1983ea8
+}
+
+body:json {
+  {
+      "title": "Compra de CDB",
+      "amount": 850,
+      "date": "2025-11-21",
+      "type": "income",
+      "category_id": 6,
+      "description": "Compra de CDB",
+      "account_id": 1  
+  }
+}
+
+settings {
+  encodeUrl: true
+}

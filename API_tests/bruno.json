@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "controle_financeiro",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

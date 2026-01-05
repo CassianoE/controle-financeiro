@@ -1,0 +1,23 @@
+meta {
+  name: Deletar Category
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{localhost}}/api/categories/8
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: 6|ydEvR8BaiUqIuNyxvlC750JH0ywFYnry4yAnJclb53c61489
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,23 @@
+meta {
+  name: Busca categoria especifica
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{localhost}}/api/categories/5
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: 2|CqCe16fC8pkcKPeNb9zlu1fPBdkF1qsxI47Q21YG812d49d9
+}
+
+settings {
+  encodeUrl: true
+}

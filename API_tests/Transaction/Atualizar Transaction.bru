@@ -1,0 +1,34 @@
+meta {
+  name: Atualizar Transaction
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{localhost}}/api/transactions/3
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: 7|ZX0sly6YCQh7L80EcjKxcigogd4ihuocTSWZzBqt05a0e689
+}
+
+body:json {
+  {
+      "title": "acidente",
+      "amount": 2000,
+      "type": "expense",
+      "date": "2025-11-20",
+      "description": "Testando reversão",
+      "category_id": 9
+  }
+}
+
+settings {
+  encodeUrl: true
+}

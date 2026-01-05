@@ -1,0 +1,33 @@
+meta {
+  name: Register
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{localhost}}/api/auth/register
+  body: json
+  auth: inherit
+}
+
+headers {
+  Accept: application/json
+}
+
+body:json {
+  {
+      "name": "cassiano",
+      "email": "cassiano@outlook.com",
+      "password": "cassiano"
+  }
+  
+}
+
+vars:pre-request {
+  localhost: http://127.0.0.1:8000
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
